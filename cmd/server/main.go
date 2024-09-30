@@ -21,9 +21,6 @@ var embedServerKey []byte
 
 func main() {
 	addr := flag.String("addr", ":4000", "HTTPS network address")
-	//certFile := flag.String("certfile", "cert.pem", "certificate PEM file")
-	//keyFile := flag.String("keyfile", "key.pem", "key PEM file")
-	//clientCertFile := flag.String("clientcert", "clientcert.pem", "certificate PEM for client authentication")
 	flag.Parse()
 
 	mux := http.NewServeMux()

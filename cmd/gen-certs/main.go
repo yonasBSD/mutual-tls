@@ -66,7 +66,7 @@ func main() {
 		certfile = "clientcert.pem"
 	}
 
-	if err := os.WriteFile(certfile, pemCert, 0644); err != nil {
+	if err := os.WriteFile(certfile, pemCert, 0600); err != nil {
 		log.Fatal(err)
 	}
 	log.Print("wrote ", certfile, "\n")
