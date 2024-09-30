@@ -62,5 +62,5 @@ func main() {
 	}
 
 	fmt.Printf("%v\n", r.Status)
-	fmt.Printf(string(html))
+	fmt.Print(string(html))
 }
