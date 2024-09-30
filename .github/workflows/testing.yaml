@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 
 on: # yamllint disable-line rule:truthy
   pull_request:
@@ -12,8 +12,8 @@ permissions:
   statuses: write
 
 jobs:
-  test:
-    name: Test
+  tests:
+    name: Run tests
     runs-on: ubuntu-latest
 
     steps:
