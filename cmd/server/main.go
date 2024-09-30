@@ -52,6 +52,7 @@ func main() {
 			ClientAuth:               tls.RequireAndVerifyClientCert,
 			Certificates:             []tls.Certificate{cert},
 		},
+    ReadHeaderTimeout: 60 * time.Second,
 	}
 
 	log.Printf("Starting server on %s", *addr)
