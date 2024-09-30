@@ -30,7 +30,7 @@ jobs:
           go-version: stable
 
       - name: Generate certs
-        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv ./client*pem cmd/client/ && cp cert.pem cmd/client/ && mv ./*pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
 
       - name: Build client
         run: go build -v ./cmd/client
@@ -58,7 +58,7 @@ jobs:
           go-version: stable
 
       - name: Generate certs
-        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv ./client*pem cmd/client/ && cp cert.pem cmd/client/ && mv ./*pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
 
       - name: Build client
         run: go build -v ./cmd/client
