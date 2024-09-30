@@ -36,5 +36,5 @@ jobs:
       - name: Build server
         run: go build -v ./cmd/server
 
-      - name: Test
+      - name: Run tests
         uses: robherley/go-test-action@v0

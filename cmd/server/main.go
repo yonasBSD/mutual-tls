@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 )
 
 //go:embed clientcert.pem
@@ -52,7 +53,7 @@ func main() {
 			ClientAuth:               tls.RequireAndVerifyClientCert,
 			Certificates:             []tls.Certificate{cert},
 		},
-    ReadHeaderTimeout: 60 * time.Second,
+		ReadHeaderTimeout: 60 * time.Second,
 	}
 
 	log.Printf("Starting server on %s", *addr)
