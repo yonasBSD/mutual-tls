@@ -54,7 +54,7 @@ func main() {
 
 	html, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	fmt.Printf("%v\n", r.Status)
