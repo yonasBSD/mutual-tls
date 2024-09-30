@@ -1,0 +1,40 @@
+name: Test
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Generate certs
+        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+
+      - name: Build client
+        run: go build -v ./cmd/client
+
+      - name: Build server
+        run: go build -v ./cmd/server
+
+      - name: Test
+        uses: robherley/go-test-action@v0
