@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	for_client := flag.Bool("client", false, "Generate client certificates")
+	forClient := flag.Bool("client", false, "Generate client certificates")
 	flag.Parse()
 
 	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
@@ -62,7 +62,7 @@ func main() {
 	}
 
 	certfile := "cert.pem"
-	if *for_client {
+	if *forClient {
 		certfile = "clientcert.pem"
 	}
 
@@ -82,7 +82,7 @@ func main() {
 	}
 
 	keyfile := "key.pem"
-	if *for_client {
+	if *forClient {
 		keyfile = "clientkey.pem"
 	}
 	if err := os.WriteFile(keyfile, pemKey, 0600); err != nil {
