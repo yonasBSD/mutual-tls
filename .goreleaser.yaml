@@ -1,0 +1,93 @@
+version: 2
+builds:
+  - main: "./cmd/client"
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+    ldflags:
+      - "-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.commitDate={{.CommitTimestamp}}"
+    goos:
+      - freebsd
+      - openbsd
+      - netbsd
+      - dragonfly
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "7"
+    binary: "{{ .ProjectName }}-client"
+    hooks:
+      pre: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+  - main: "./cmd/server"
+    env:
+      - CGO_ENABLED=0
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
+    ldflags:
+      - "-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.commitDate={{.CommitTimestamp}}"
+    goos:
+      - freebsd
+      - openbsd
+      - netbsd
+      - dragonfly
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "7"
+    binary: "{{ .ProjectName }}-server"
+nfpms:
+  - vendor: Acme Inc.
+    homepage: https://github.com/yonasBSD/{{ .ProjectName }}
+    maintainer: Me <me@example.com>
+    description: |-
+      {{ .ProjectName }} installer package.
+      {{ .ProjectName }} description.
+    license: MIT
+    contents:
+      - src: LICENSE
+        dst: "/usr/share/doc/{{ .ProjectName }}/copyright"
+    formats:
+      - apk
+      - deb
+archives:
+  - id: "zstd_or_zip"
+    format: tzst
+    format_overrides:
+      - goos: windows
+        format: zip
+      - goos: darwin
+        format: zip
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+  algorithm: blake2b
+sboms:
+  - artifacts: archive
+signs:
+  - artifacts: checksum
+    args:
+      # if you are using this in a GitHub action or some other automated pipeline, you
+      # need to pass the batch flag to indicate its not interactive.
+      - "--batch"
+      - "--local-user"
+      - "{{ .Env.GPG_FINGERPRINT }}"
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+# release:
+#   draft: true
+changelog:
+  use: github-native

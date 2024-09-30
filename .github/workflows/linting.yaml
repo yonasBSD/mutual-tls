@@ -1,0 +1,71 @@
+name: Linting
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: read
+  packages: read
+  statuses: write
+
+jobs:
+  golangci:
+    name: Go Lang CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Generate certs
+        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+
+      - name: Build client
+        run: go build -v ./cmd/client
+
+      - name: Build server
+        run: go build -v ./cmd/server
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: latest
+
+  super-linter:
+    name: Super Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Generate certs
+        run: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
+
+      - name: Build client
+        run: go build -v ./cmd/client
+
+      - name: Build server
+        run: go build -v ./cmd/server
+
+      - name: Super-linter
+        uses: github/super-linter@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
