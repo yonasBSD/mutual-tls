@@ -69,3 +69,16 @@ jobs:
         uses: github/super-linter@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      cog_check_job:
+
+  conventional_commits:
+    name: Check conventional commit compliance
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Conventional commit check
+        uses: cocogitto/cocogitto-action@v3
