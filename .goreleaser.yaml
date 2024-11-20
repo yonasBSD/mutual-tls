@@ -1,7 +1,8 @@
 ---
 version: 2
 builds:
-  - main: "./cmd/client"
+  - id: "mutual-tls-client"
+    main: "./cmd/client"
     env:
       - CGO_ENABLED=0
     mod_timestamp: "{{ .CommitTimestamp }}"
@@ -26,7 +27,8 @@ builds:
     binary: "{{ .ProjectName }}-client"
     hooks:
       pre: go build -v ./cmd/gen-certs && ./gen-certs -client && ./gen-certs && mv client*pem cmd/client/ && cp cert.pem cmd/client/ && mv *pem ./cmd/server/ && cp cmd/client/clientcert.pem cmd/server/
-  - main: "./cmd/server"
+  - id: "mutual-tls-server"
+    main: "./cmd/server"
     env:
       - CGO_ENABLED=0
     mod_timestamp: "{{ .CommitTimestamp }}"
